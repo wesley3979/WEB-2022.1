@@ -1,1 +1,12 @@
-//ter as funções de addCategoria e getCategorias
+var produtos = []
+
+function addProduto(produto) {
+  produtos.push(produto);
+}
+
+function getProdutos() {
+  return produtos;
+}
+
+exports.addProduto = addProduto;
+exports.getProdutos = getProdutos;

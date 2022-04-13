@@ -1,26 +1,52 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-br">
+<style>
+  table,
+  th,
+  td {
+    border: 1px solid black;
+  }
+</style>
 
 <head>
   <title>
     <%= title %>
   </title>
-  <link rel='stylesheet' href='/stylesheets/style.css' />
 </head>
 
 <body>
-  <h1>
+  <h1 class="titlePage">
     <%= title %>
   </h1>
-  <p>
-    <%= message %>
-  </p>
-  <p>
-    tabela com as categorias disponíveis no sistema
-    possuindo 3 colunas, sendo elas: Chave, Valor e ---Deletar Nas linhas
-    depois do cabeçalho, a coluna Chave mostra o valor do atributo chave
-    daquela categoria, e a coluna Valor, mostra o atributo valor
-  </p>
+  <div class="tableContainer">
+    <table>
+      <tr>
+        <th>Id</th>
+        <th>Valor</th>
+        <th>Deletar</th>
+      </tr>
+      <% for(var i=0; i<categories.length; i++) {%>
+        <tr>
+          <td>
+            <%= categories[i].id %>
+          </td>
+          <td>
+            <%= categories[i].value %>
+          </td>
+          <td><a href="/">X</a></td>
+        </tr>
+        <% } %>
+    </table>
+  </div>
+  <div class="formContainer">
+    <h2>Cadastrar nova categoria</h2>
+
+    <form action="/category/category-delete" method="POST">
+      <label for="cname">Nome:</label><br>
+      <input type="text" id="cname" name="cname" placeholder="Digite o nome da categoria"><br><br>
+      <input type="submit" value="Cadastrar">
+    </form>
+  </div>
   <a href="/">Home</a>
 </body>
 

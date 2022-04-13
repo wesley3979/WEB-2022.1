@@ -6,8 +6,23 @@ const port = 8080
 app.set('view engine', 'ejs');
 app.set('views', './views');
 
+const bdProdutos = require('./repositories/BDCategorias');
+
 app.get('/category', (req, res) => {
-  res.render('categoryPage', { title: 'Categorias', message: 'Bem vindo as categorias' });
+  const categories = [
+    {
+      id: 1,
+      value: 'value',
+    }
+  ]
+  res.render('categoryPage', { title: 'Categorias', categories });
+});
+
+app.post('/category/category-delete', (req, res) => {
+  const name = req.params.cname;
+
+  console.log(name)
+  res.redirect('/')
 });
 
 app.get('/product', (req, res) => {
