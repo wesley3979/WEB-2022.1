@@ -1,0 +1,1 @@
+//ter as funções de addCategoria e getCategorias
