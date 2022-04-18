@@ -1,28 +1,35 @@
 const express = require('express')
 const app = express()
 app.use(express.static('public'));
-const port = 8080
+const port = 8081
 
 app.set('view engine', 'ejs');
 app.set('views', './views');
 
-const bdProdutos = require('./repositories/BDCategorias');
+const bdcategories = require('./repositories/BDCategorias');
 
 app.get('/category', (req, res) => {
-  const categories = [
-    {
-      id: 1,
-      value: 'value',
-    }
-  ]
-  res.render('categoryPage', { title: 'Categorias', categories });
+
+  let categories = bdcategories.getCategories()
+
+  res.render('categoryPage', { categories });
 });
 
-app.post('/category/category-delete', (req, res) => {
-  const name = req.params.cname;
-
+app.post('/category/add', (req, res) => {
+  const { body } = req
+  const name = body
+  console.log(body)
   console.log(name)
-  res.redirect('/')
+  bdcategories.addCategory(name)
+
+  res.redirect('/category')
+});
+
+app.get('/category/category-delete/:id', (req, res) => {
+  const id = req.params.id;
+  bdcategories.deleteCategories(id)
+
+  res.redirect('/category')
 });
 
 app.get('/product', (req, res) => {

@@ -10,13 +10,13 @@
 
 <head>
   <title>
-    <%= title %>
+    Categorias
   </title>
 </head>
 
 <body>
   <h1 class="titlePage">
-    <%= title %>
+    Categorias
   </h1>
   <div class="tableContainer">
     <table>
@@ -33,7 +33,7 @@
           <td>
             <%= categories[i].value %>
           </td>
-          <td><a href="/">X</a></td>
+          <td><a href="/category/category-delete/<%= categories[i].id %>">X</a></td>
         </tr>
         <% } %>
     </table>
@@ -41,9 +41,9 @@
   <div class="formContainer">
     <h2>Cadastrar nova categoria</h2>
 
-    <form action="/category/category-delete" method="POST">
-      <label for="cname">Nome:</label><br>
-      <input type="text" id="cname" name="cname" placeholder="Digite o nome da categoria"><br><br>
+    <form action="/category/add" method="POST">
+      <label for="name">Nome:</label><br>
+      <input type="text" id="name" name="name" placeholder="Digite o nome da categoria"><br><br>
       <input type="submit" value="Cadastrar">
     </form>
   </div>

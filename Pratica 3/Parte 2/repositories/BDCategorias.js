@@ -1,12 +1,49 @@
-var produtos = []
+var categories = [
+  {
+    "id": 0,
+    "value": "wesley",
+  },
+  {
+    "id": 1,
+    "value": "wesley1",
+  },
+  {
+    "id": 2,
+    "value": "wesley2",
+  },
+  {
+    "id": 3,
+    "value": "wesley3",
+  },
+]
 
-function addProduto(produto) {
-  produtos.push(produto);
+function addCategory(name) {
+  let category = {
+    "id": setNextId(),
+    "name": name,
+  }
+  categories.push(category);
 }
 
-function getProdutos() {
-  return produtos;
+function getCategories() {
+  return categories;
 }
 
-exports.addProduto = addProduto;
-exports.getProdutos = getProdutos;
+function deleteCategories(id) {
+  categories = categories.filter((category) => category.id !== parseInt(id))
+  return categories;
+}
+
+function getCategorieById(id) {
+  return id;
+}
+
+function setNextId() {
+  return categories[categories.length - 1].id;
+}
+
+exports.addCategory = addCategory;
+exports.getCategories = getCategories;
+exports.deleteCategories = deleteCategories;
+exports.getCategorieById = getCategorieById;
+
