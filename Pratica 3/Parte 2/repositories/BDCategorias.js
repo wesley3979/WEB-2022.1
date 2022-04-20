@@ -20,7 +20,7 @@ var categories = [
 function addCategory(name) {
   let category = {
     "id": setNextId(),
-    "name": name,
+    "value": name,
   }
   categories.push(category);
 }
@@ -34,16 +34,14 @@ function deleteCategories(id) {
   return categories;
 }
 
-function getCategorieById(id) {
-  return id;
-}
-
 function setNextId() {
-  return categories[categories.length - 1].id;
+  if (categories.length <= 0)
+    return 0;
+
+  return categories[categories.length - 1].id + 1;
 }
 
 exports.addCategory = addCategory;
 exports.getCategories = getCategories;
 exports.deleteCategories = deleteCategories;
-exports.getCategorieById = getCategorieById;
 

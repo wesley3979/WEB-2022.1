@@ -16,7 +16,7 @@
 
 <body>
   <h1 class="titlePage">
-    Categorias
+    Bem-vindo as Categorias
   </h1>
   <div class="tableContainer">
     <table>
@@ -41,9 +41,10 @@
   <div class="formContainer">
     <h2>Cadastrar nova categoria</h2>
 
-    <form action="/category/add" method="POST">
-      <label for="name">Nome:</label><br>
-      <input type="text" id="name" name="name" placeholder="Digite o nome da categoria"><br><br>
+    <form action="/category/add" method="post">
+      <div>
+        <input type="text" name="name" placeholder="Digite um nome" />
+      </div>
       <input type="submit" value="Cadastrar">
     </form>
   </div>

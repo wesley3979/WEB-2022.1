@@ -1,12 +1,18 @@
 const express = require('express')
 const app = express()
-app.use(express.static('public'));
 const port = 8081
 
+app.use(
+  express.urlencoded({
+    extended: true,
+  }),
+)
 app.set('view engine', 'ejs');
 app.set('views', './views');
 
 const bdcategories = require('./repositories/BDCategorias');
+const bdproducts = require('./repositories/BDProdutos');
+
 
 app.get('/category', (req, res) => {
 
@@ -16,13 +22,20 @@ app.get('/category', (req, res) => {
 });
 
 app.post('/category/add', (req, res) => {
-  const { body } = req
-  const name = body
-  console.log(body)
-  console.log(name)
+  const name = req.body.name
   bdcategories.addCategory(name)
 
   res.redirect('/category')
+});
+
+app.post('/product/add', (req, res) => {
+  const name = req.body.name
+  const description = req.body.description
+  const price = req.body.price
+
+  bdproducts.addProduct({ "name": name, "description": description, "price": price })
+
+  res.redirect('/product')
 });
 
 app.get('/category/category-delete/:id', (req, res) => {
@@ -32,8 +45,16 @@ app.get('/category/category-delete/:id', (req, res) => {
   res.redirect('/category')
 });
 
+app.get('/product/product-delete/:id', (req, res) => {
+  const id = req.params.id;
+  bdproducts.deleteProduct(id)
+
+  res.redirect('/product')
+});
+
 app.get('/product', (req, res) => {
-  res.render('productPage', { title: 'Produtos', message: 'Bem vindo aos produtos' });
+  let products = bdproducts.getProducts()
+  res.render('productPage', { products });
 });
 
 //redirect user to another page
