@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<style>
+  table,
+  th,
+  td {
+    border: 1px solid black;
+  }
+</style>
+
+<head>
+  <title>
+    Produtos
+  </title>
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+
+<body>
+  <h1>
+    Bem-vindo ao cadastro de Produtos
+  </h1>
+  <div class="formContainer">
+    <h2>Cadastrar novo produto</h2>
+
+    <form action="/product/add" method="post">
+      <div>
+        <input type="text" name="name" value="<%= product.name %>" />
+      </div>
+      <div>
+        <input type="text" name="description" value="<%= product.description %>" />
+      </div>
+      <div>
+        <input type="text" name="price" value="<%= product.price %>" />
+      </div>
+      <label for="category">Categoria:</label>
+      <select name="category" id="category">
+      <% for(var i=0; i<categories.length; i++) {%>
+        <option value="<%= categories[i].id %>"><%=categories[i].value%></option>
+        <% } %>
+      </select><br>
+      <input type="submit" value="Cadastrar produto">
+    </form>
+  </div>
+  <a href="/product">Voltar para lista de produtos</a>
+</body>
+
+</html>
