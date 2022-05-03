@@ -34,9 +34,11 @@
       </div>
       <label for="category">Categoria:</label>
       <select name="category" id="category">
-      <% for(var i=0; i<categories.length; i++) {%>
-        <option value="<%= categories[i].id %>"><%=categories[i].value%></option>
-        <% } %>
+        <% for(var i=0; i<categories.length; i++) {%>
+          <option value="<%= categories[i].id %>">
+            <%=categories[i].value%>
+          </option>
+          <% } %>
       </select><br>
       <input type="submit" value="Cadastrar produto">
     </form>

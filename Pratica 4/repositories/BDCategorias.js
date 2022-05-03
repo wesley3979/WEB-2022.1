@@ -2,25 +2,21 @@ var categories = [
   {
     "id": 0,
     "value": "wesley",
+    "personalizado": ["personalizado1", "personalizado2"],
   },
   {
     "id": 1,
-    "value": "wesley1",
+    "value": "wesley 2",
+    "personalizado": ["personalizado3", "personalizado4"],
   },
-  {
-    "id": 2,
-    "value": "wesley2",
-  },
-  {
-    "id": 3,
-    "value": "wesley3",
-  },
+
 ]
 
-function addCategory(name) {
+function addCategory(name, personalizado) {
   let category = {
     "id": setNextId(),
     "value": name,
+    "personalizado": personalizado,
   }
   categories.push(category);
 }
@@ -37,10 +33,10 @@ function deleteCategories(id) {
 function getCategoryById(id) {
   const catetegory = categories.find(x => x.id == id)
 
-  if(catetegory)
+  if (catetegory)
     return catetegory;
   else
-    return { "id": 0, "value": "sem categoria"}
+    return { "id": 0, "value": "sem categoria" }
 }
 
 function setNextId() {

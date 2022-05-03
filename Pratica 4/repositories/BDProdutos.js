@@ -1,7 +1,7 @@
 var products = [
   {
     "id": 0,
-    "category":   {
+    "category": {
       "id": 0,
       "value": "wesley teste",
     },
@@ -11,7 +11,7 @@ var products = [
   },
   {
     "id": 1,
-    "category":   {
+    "category": {
       "id": 0,
       "value": "wesley cetegoria",
     },
@@ -22,7 +22,7 @@ var products = [
 ]
 
 function addProduct(product) {
-  products.push({ id: setNextId(), category: product.category, name: product.name, description: product.description, price: product.price });
+  products.push({ id: setNextId(), category: product.category, name: product.name, description: product.description, price: product.price, personalizado: product.personalizado });
 }
 
 function getProducts() {
@@ -44,10 +44,10 @@ function setNextId() {
 function getProductById(id) {
   const product = products.find(x => x.id == id)
 
-  if(product)
+  if (product)
     return product;
   else
-    return { "id": 0, "value": "sem produto"}
+    return { "id": 0, "value": "sem produto" }
 }
 
 exports.addProduct = addProduct;

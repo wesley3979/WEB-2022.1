@@ -23,7 +23,8 @@ app.get('/category', (req, res) => {
 
 app.post('/category/add', (req, res) => {
   const name = req.body.name
-  bdcategories.addCategory(name)
+  const personalizado = req.body.personalizado.split(",")
+  bdcategories.addCategory(name, personalizado)
 
   res.redirect('/category')
 });
@@ -38,8 +39,9 @@ app.post('/product/add', (req, res) => {
   const category = bdcategories.getCategoryById(req.body.category)
   const description = req.body.description
   const price = req.body.price
+  const personalizado = req.body.personalizado
 
-  bdproducts.addProduct({ "name": name, "category": category, "description": description, "price": price })
+  bdproducts.addProduct({ "name": name, "category": category, "description": description, "price": price, "personalizado": personalizado })
 
   res.redirect('/product')
 });
