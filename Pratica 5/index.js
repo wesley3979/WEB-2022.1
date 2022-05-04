@@ -14,38 +14,42 @@ app.set('view engine', 'ejs');
 app.set('views', './views');
 
 app.use('/produto/meus-produtos', basicAuth({ authorizer: myAuthorizerMongo, authorizeAsync: true, challenge: true }));
-app.get('/produto/meus-produtos', (req, res) => {
-  //faltar fazer um get no user, arrumar o html e mostrar o nome do usuário no topo da pagina
+app.get('/produto/meus-produtos', async (req, res) => {
   basic = Buffer.from(req.headers.authorization.split(' ')[1], 'base64').toString().split(':');
   username = basic[0];
   password = basic[1];
-  console.log('Username: ' + username);
-  console.log('Password: ' + password);
 
-  res.render('homePage', { title: 'Home', message: 'Bem vindo as categorias e produtos' });
+  const products = await database.getProductsByUser(username)
+
+  res.render('myProductsPage', { user: username, products });
 });
 
 
 app.use('/produto/produto-novo', basicAuth({ authorizer: myAuthorizerMongo, authorizeAsync: true, challenge: true }));
 app.get('/produto/produto-novo', (req, res) => {
-  //falta fazer um get no user e mostra-lo na tela
+
+  basic = Buffer.from(req.headers.authorization.split(' ')[1], 'base64').toString().split(':');
+  username = basic[0];
+
   const categories = ["Comida", "Livro", "Computador", "Celular", "outro"]
-  res.render('addProductPage', { user: 'Andre Meireles', categories });
+  res.render('addProductPage', { user: username, categories });
 });
 
 app.post('/produto/produto-novopost', async (req, res) => {
-  //falta fazer um get no user e salva-lo como "author"
+
   const product = {
     name: req.body.name,
     category: req.body.category,
     description: req.body.description,
-    price: req.body.price
+    price: req.body.price,
+    author: req.body.author
   }
 
   await database.insertProduct(product)
 
-  //falta mandar redirecionar para meus-produtos
-  res.render('homePage', { title: 'Home', message: '/produto/produto-novopost' });
+  const products = await database.getProductsByUser(username)
+
+  res.render('myProductsPage', { user: username, products });
 });
 
 app.get('/', async (req, res) => {

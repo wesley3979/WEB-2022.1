@@ -36,13 +36,18 @@ async function getAllProducts() {
   return findResult;
 }
 
+async function getProductsByUser(username) {
+  const findResult = await product_collection.find({ author: username }).toArray();
+  return findResult;
+}
+
 async function insertProduct(product) {
   const findResult = await product_collection.insertOne({
     "category": product.category,
     "name": product.name,
     "description": product.description,
     "price": product.price,
-    "author": "Andre"
+    "author": product.author
   });
   return findResult;
 }
@@ -50,3 +55,5 @@ async function insertProduct(product) {
 exports.getUsers = getUsers;
 exports.getAllProducts = getAllProducts;
 exports.insertProduct = insertProduct;
+exports.getProductsByUser = getProductsByUser;
+

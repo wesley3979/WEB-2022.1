@@ -24,6 +24,9 @@
 
     <form action="/produto/produto-novopost" method="post">
       <div>
+        <input type="hidden" name="author" value="<%= user %>" />
+      </div>
+      <div>
         <input type="text" name="name" placeholder="Digite um nome" />
       </div>
       <label for="category">Categoria:</label>

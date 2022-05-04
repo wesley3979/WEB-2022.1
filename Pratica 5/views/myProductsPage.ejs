@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<style>
+  table,
+  th,
+  td {
+    border: 1px solid black;
+  }
+</style>
+
+<head>
+  <title>
+    Produtos
+  </title>
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+
+<body>
+  <h1>
+    Loja - Produtos - User: <%= user %>
+  </h1>
+  <div class="tableContainer">
+    <table>
+      <tr>
+        <th>Id</th>
+        <th>Categoria</th>
+        <th>Nome</th>
+        <th>Descrição</th>
+        <th>Preço</th>
+      </tr>
+      <% for(var i=0; i<products.length; i++) {%>
+        <tr>
+          <td>
+            <%= i %>
+          </td>
+          <td>
+            <%= products[i].category %>
+          </td>
+          <td>
+            <%= products[i].name %>
+          </td>
+          <td>
+            <%= products[i].description %>
+          </td>
+          <td>
+            <%= products[i].price %>
+          </td>
+        </tr>
+        <% } %>
+    </table>
+  </div>
+  <a href="/">Início</a>
+</body>
+
+</html>
