@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.example.demo.entities.Aluno;
 import com.example.demo.entities.Turma;
+import com.example.demo.repositories.AlunoRepository;
 import com.example.demo.services.TurmaService;
 
 import java.util.List;
@@ -15,10 +16,18 @@ public class ApiRestController {
   @Autowired
   private TurmaService service;
 
+  @Autowired
+  AlunoRepository alunoRepository;
+
   @GetMapping
-  public List<Turma> getTurmas() {
-    return service.findAll();
+  Iterable<Aluno> getAlunos() {
+    return alunoRepository.findAll();
   }
+
+  // @GetMapping
+  // public List<Turma> getTurmas() {
+  // return service.findAll();
+  // }
 
   @GetMapping(value = "/{codigo}")
   public Turma getTurmaByCodigo(@PathVariable int codigo) {

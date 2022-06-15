@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta nome="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Turmas/Alunos</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+
+<div class="row">
+  <div class="col-12 p-5 pb-1">
+    <h3>Lista turmas</h3>
+    <table id="turmatable" class="table table-dark table-striped">
+      <thead>
+        <tr>
+          <th scope="col">Nome da disciplina</th>
+          <th scope="col">Semestre</th>
+          <th scope="col">Código</th>
+          <th scope="col"></th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+    <div id="listaTurmas"></div>
+  </div>
+  <div class="col-3 p-5 pb-1">
+    <h3>Cadastrar Turma</h3>
+    <div>
+      <label for="name">Disciplina:</label><br>
+      <input name="name" type="text" id="disCadastrar"><br>
+
+      <label for="codigo">Código:</label><br>
+      <input name="codigo" type="number" id="codCadastrar"><br>
+
+      <label for="semestre">Semestre:</label><br>
+      <input name="semestre" type="number" id="semCadastrar"><br>
+
+      <input type="button" value="save" onclick="save()">
+    </div>
+  </div>
+  <div class="col-3 p-5 pb-1">
+    <h3>Cadastrar Aluno</h3>
+    <div>
+      <label for="codigoTurma">Código turma:</label><br>
+      <input name="codigoTurma" type="number" id="codigoTurma"> <br />
+
+      <label for="matAluno">Matrícula:</label><br>
+      <input name="matAluno" type="number" id="matAluno"> <br />
+
+      <label for="nomAluno">Nome:</label><br>
+      <input name="nomAluno" type="text" id="nomAluno"> <br />
+
+      <label for="emaAluno">Email:</label><br>
+      <input name="emaAluno" atype="text" id="emaAluno"> <br />,
+
+      <input name="emaAluno" type="button" value="save" onclick="addAluno()">
+    </div>
+  </div>
+  <div class="col-3 p-5 pb-1">
+    <h3>Lista alunos</h3>
+    <label for="codTurma">Código Turma:</label><br>
+    <input type="number" id="codTurma"> <br />
+
+    <input type="button" value="enviar" onclick="getAlunos()">
+
+    <div id="listaAlunos"></div>
+  </div>
+  <div class="col-3 p-5 pb-1">
+    <h3>Deletar Aluno</h3>
+    <div>
+      <label for="codTurm">Código Turma:</label><br>
+      <input type="number" id="codTurm"> <br />
+
+      <label for="matDelete">Matrícula aluno:</label><br>
+      <input type="number" id="matDelete"> <br />
+
+      <input type="button" value="apagar" onclick="deleteAluno()">
+    </div>
+  </div>
+  <div style="border-style: solid;"></div>
+</div>
+
+<body>
+
+  <!--modal edit turma-->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Editar turma</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <input type="hidden" id="oldcode" value="">
+            <div class="mb-3">
+              <label for="editnometurma" class="col-form-label">Nome da disciplina:</label>
+              <input type="text" class="form-control" id="editnometurma">
+            </div>
+            <div class="mb-3">
+              <label for="editcodigoturma" class="col-form-label">Código:</label>
+              <input type="number" class="form-control" id="editcodigoturma">
+            </div>
+            <div class="mb-3">
+              <label for="editsemestreturma" class="col-form-label">Semestre:</label>
+              <input type="number" class="form-control" id="editsemestreturma">
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+          <button type="button" class="btn btn-primary" onclick="edit()">Salvar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+  integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script>
+  var xhr = new XMLHttpRequest();
+
+  xhr.open("GET", "/api/turma", true);
+  xhr.responseType = "json"
+  xhr.onload = function () {
+    if (this.readyState == 4 && this.status == 200) {
+      turmas = xhr.response
+
+      for (const i in turmas) {
+        let t = turmas[i];
+        iconDelete = `<div onclick="delet(${t.codigo})"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="red" class="bi bi-x-circle-fill" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/></svg></div>`
+        iconEdit = `<div data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="${turmas[i].disciplina}/${turmas[i].semestre}/${turmas[i].codigo}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="white" class="bi bi-pencil-fill" viewBox="0 0 16 16"><path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z"/></svg></div>`
+        row = '<tr>' + '<td>' + t.disciplina + '</td>' + '<td>' + t.semestre + '</td>' + '<td>' + t.codigo + '</td>' + '<td>' + iconDelete + '</td>' + '<td>' + iconEdit + '</td>' + '</tr>';
+        $("#turmatable>tbody").append(row);
+      }
+    }
+    else if (this.readyState == 4 && this.status == 404) {
+      alert("Não há registro de turmas");
+    }
+  };
+  xhr.send();
+
+  function save() {
+    let disciplina = document.getElementById("disCadastrar").value;
+    let codigo = document.getElementById("codCadastrar").value;
+    let semestre = document.getElementById("semCadastrar").value;
+
+    newturm = { disciplina: disciplina, codigo: parseInt(codigo), semestre: parseInt(semestre) };
+    xhr.open("POST", "/api/turma", true);
+    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    xhr.send(JSON.stringify(newturm));
+
+    xhr.onload = function () {
+      if (this.readyState == 4 && this.status == 400) {
+        alert("Turma já existe");
+      };
+    };
+
+    setTimeout(function () {
+      window.location.reload(true)
+    }, 1000);
+
+  };
+
+  function edit() {
+    disciplina = $('#editnometurma').val();
+    codigo = $('#oldcode').val();
+    semestre = $('#editsemestreturma').val();
+    newCodigo = $('#editcodigoturma').val();
+    console.log(codigo)
+    editTurm = { disciplina: disciplina.toString(), codigo: parseInt(newCodigo), semestre: parseInt(semestre) };
+    xhr.open("PUT", "/api/turma/" + codigo, true);
+    xhr.setRequestHeader('Content-type', 'application/json');
+    xhr.send(JSON.stringify(editTurm));
+
+    xhr.onload = function () {
+      if (this.readyState == 4 && this.status == 404) {
+        alert("Turma não encontrada");
+      };
+    };
+
+    setTimeout(function () {
+      window.location.reload(true)
+    }, 1000);
+  };
+
+  function delet(value) {
+    xhr.open("DELETE", "/api/turma/" + value, true);
+    xhr.send();
+
+    xhr.onload = function () {
+      if (this.readyState == 4 && this.status == 404) {
+        console.log("Turma não encontrada");
+      };
+    };
+
+    setTimeout(function () {
+      window.location.reload(true)
+    }, 1000);
+  };
+
+  function getAlunos() {
+    let codigo = document.getElementById("codTurma").value;
+    xhr.open("GET", "/api/turma/" + codigo + "/alunos", true);
+    xhr.responseType = "json"
+    xhr.onload = function () {
+      if (this.readyState == 4 && this.status == 200) {
+        alunos = xhr.response
+
+        listaAlunosDiv = document.getElementById("listaAlunos");
+        lista = '';
+
+        for (const i in alunos) {
+          let t = alunos[i];
+          lista += `Aluno ${i} : ${t.matricula}, ${t.nome}, ${t.email} \n`;
+        }
+
+        //istaAlunosDiv.innerHTML = lista;
+      }
+      else if (this.readyState == 4 && this.status == 404) {
+        alert("Turma não encontrada ou não há alunos matriculados nessa turma");
+      }
+
+      alert(lista);
+    };
+    xhr.send();
+  };
+
+  function addAluno() {
+    let codigoTurma = document.getElementById("codigoTurma").value;
+    let matricula = document.getElementById("matAluno").value;
+    let nome = document.getElementById("nomAluno").value;
+    let email = document.getElementById("emaAluno").value;
+    newAluno = { matricula: parseInt(matricula), nome: nome, email: email };
+
+    xhr.open("POST", "/api/turma/" + codigoTurma + "/alunos", true);
+    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    xhr.send(JSON.stringify(newAluno));
+
+    xhr.onload = function () {
+      if (this.readyState == 4 && this.status == 400) {
+        alert("Aluno já matriculado nessa turma");
+      };
+      if (this.readyState == 4 && this.status == 404) {
+        alert("Turma não encontrada");
+      };
+    };
+  };
+
+  function deleteAluno() {
+    let codigoTurma = document.getElementById("codTurm").value;
+    let matricula = document.getElementById("matDelete").value;
+
+    xhr.open("DELETE", "/api/turma/" + codigoTurma + "/alunos/" + matricula, true);
+    xhr.send();
+
+    xhr.onload = function () {
+      if (this.readyState == 4 && this.status == 404) {
+        alert("Turma não encontrada ou não há alunos matriculados nessa turma");
+      };
+      if (this.readyState == 4 && this.status == 405) {
+        alert("Informe a matrícula do aluno");
+      };
+    };
+  };
+
+  var exampleModal = document.getElementById('exampleModal')
+  exampleModal.addEventListener('show.bs.modal', function (event) {
+    var button = event.relatedTarget
+    var recipient = button.getAttribute('data-bs-whatever')
+
+    var editnometurma = exampleModal.querySelector('#editnometurma')
+    var editcodigoturma = exampleModal.querySelector('#editcodigoturma')
+    var editsemestreturma = exampleModal.querySelector('#editsemestreturma')
+    var oldcode = exampleModal.querySelector('#oldcode')
+
+
+    data = recipient.split("/")
+    oldcode.value = data[2]
+
+    editnometurma.value = data[0]
+    editcodigoturma.value = data[2]
+    editsemestreturma.value = data[1]
+
+  })
+
+</script>
+
+</html>
